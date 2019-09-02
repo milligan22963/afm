@@ -1,0 +1,53 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://www.afmsoftware.com/mqttoptions.json",
+    "type": "object",
+    "title": "The primary mqtt server/client options",
+    "required": [
+        "url",
+        "port"
+    ],
+    "properties": {
+        "url": {
+            "$id": "#/properties/url",
+            "type": "string",
+            "title": "The Url to use",
+            "default": "",
+            "examples": [
+                "www.mqtt.org"
+            ],
+            "pattern": "^(.*)$"
+        },
+        "port": {
+            "$id": "#/properties/port",
+            "type": "integer",
+            "title": "The Port definition",
+            "default": 1883,
+            "examples": [
+                1883,
+                8883
+            ]
+        },
+        "persistence": {
+            "$id" : "#/properties/persistence",
+            "type":"object",
+            "title": "Persistence Options",
+            "properties": {
+                "path":{
+                    "$id": "#properties/perstistence/path",
+                    "type":"string",
+                    "title": "The full path to the storage area"
+                },
+                "backlog": {
+                    "$id": "#properties/persistence/backlog",
+                    "type":"integer",
+                    "title": "The depth of the backlog",
+                    "default": 100,
+                    "minimum": 1
+                }
+            }
+        }
+    }
+}
+   

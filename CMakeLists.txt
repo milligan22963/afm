@@ -12,11 +12,21 @@ include(configuration/${AFM_CONFIG}.cmake)
 set (CMAKE_CXX_STANDARD 14)
 
 set (JSON_INCLUDE /usr/local/include/nlohmann)
-set (COMMON_INCLUDE ${CMAKE_SOURCE_DIR}/common)
 
 # Output for install
 set (LIB_DIR ${CMAKE_BINARY_DIR}/staging/lib)
 set (BIN_DIR ${CMAKE_BINARY_DIR}/staging/bin)
 
-add_subdirectory(communications)
+# Common defines
+set(COMMON_INCLUDE ${CMAKE_SOURCE_DIR}/common)
+set(COMMON_LIB ${CMAKE_BINARY_DIR}/common)
 
+# Communications defines
+set(SOCKET_INCLUDE ${CMAKE_SOURCE_DIR}/communications/socket)
+set(SOCKET_LIB ${CMAKE_BINARY_DIR}/communications/socket)
+set(MQTT_INCLUDE ${CMAKE_SOURCE_DIR}/communications/mqtt)
+set(MQTT_LIB ${CMAKE_BINARY_DIR}/communications/mqtt)
+
+# Now for each subdirectory - add after defines above
+add_subdirectory(common)
+add_subdirectory(communications)
