@@ -98,44 +98,96 @@ namespace afm {
             return success;
         }
 
-        SocketBuffer Socket::read()
+        bool Socket::write(const std::string &socketClientId, const SocketBuffer &data)
         {
-            SocketBuffer data;
+            bool success = false;
 
-            size_t bytesRead = read(data);
-
-            if (bytesRead == 0) {
-                // error?
+            if (socketClientId == m_socketClientId) {
+                success = write(data);
             }
-
-            return data;
+            return success;
         }
 
-        SocketBuffer Socket::readWait(uint32_t milliseconds)
+        bool Socket::read(SocketBuffer &buffer)
         {
-            SocketBuffer data;
+            ssize_t bytesRead = 0;
 
-            size_t bytesRead = readWait(data, milliseconds);
-
-            if (bytesRead == 0) {
-                // error?
+            buffer.clear();
+            
+            uint8_t data_buffer[1024];
+            bytesRead = ::read(m_socketHandle, data_buffer, 1023);
+            if (bytesRead > 0) {
+                buffer.reserve(bytesRead);
+                std::copy(data_buffer, data_buffer + bytesRead, std::back_inserter(buffer));
+            } else if (bytesRead == -1) {
+                socketFailure();
             }
-
-            return data;
+            return bytesRead != 0;
         }
 
-        SocketBuffer Socket::transfer(const SocketBuffer &data)
+        bool Socket::readWait(SocketBuffer &buffer, uint32_t milliseconds)
         {
-            write(data);
+            ssize_t bytesRead = 0;
+            time_t seconds = milliseconds / 1000;
+            suseconds_t microseconds = (milliseconds - (seconds * 1000)) * 1000;
 
-            return read();
+            struct timeval tv = {seconds, microseconds};
+            fd_set readDescriptorSet;
+            fd_set exceptionDescriptorSet;
+            
+            FD_ZERO(&readDescriptorSet);
+            FD_ZERO(&exceptionDescriptorSet);
+
+            FD_SET(m_socketHandle, &readDescriptorSet);
+            FD_SET(m_socketHandle, &exceptionDescriptorSet);
+
+            if (select(m_socketHandle + 1, &readDescriptorSet, nullptr, &exceptionDescriptorSet, &tv) != -1) {
+                if (FD_ISSET(m_socketHandle, &readDescriptorSet)) {
+                    bytesRead = read(buffer);
+                } else if (FD_ISSET(m_socketHandle, &exceptionDescriptorSet)) {
+                    socketFailure();
+                }
+            } else {
+                socketFailure();
+            }
+            return bytesRead != 0;
         }
 
-        SocketBuffer Socket::transferWait(const SocketBuffer &data, uint32_t milliseconds)
+        bool Socket::transfer(const SocketBuffer &dataOut, SocketBuffer &dataIn)
         {
-            write(data);
+            write(dataOut);
 
-            return readWait(milliseconds);
+            return read(dataIn);
+        }
+
+        bool Socket::transfer(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn)
+        {
+            bool success = false;
+
+            if (socketClientId == m_socketClientId) {
+                success = transfer(dataOut, dataIn);
+            }
+            return success;
+        }
+
+        bool Socket::transferWait(const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds)
+        {
+            bool success = false;
+
+            if (write(dataOut) == true) {
+                success = readWait(dataIn, milliseconds);
+            }
+            return success;
+        }
+
+        bool Socket::transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds)
+        {
+            bool success = false;
+
+            if (socketClientId == m_socketClientId) {
+                success = transferWait(dataOut, dataIn, milliseconds);
+            }
+            return success;;
         }
 
         bool Socket::connect()
@@ -190,51 +242,6 @@ namespace afm {
         std::thread Socket::createProcessingThread()
         {
             return std::thread(&Socket::read_processing, shared_from_this());
-        }
-
-        ssize_t Socket::read(SocketBuffer &buffer)
-        {
-            ssize_t bytesRead = 0;
-
-            buffer.clear();
-            
-            uint8_t data_buffer[1024];
-            bytesRead = ::read(m_socketHandle, data_buffer, 1023);
-            if (bytesRead > 0) {
-                buffer.reserve(bytesRead);
-                std::copy(data_buffer, data_buffer + bytesRead, std::back_inserter(buffer));
-            } else if (bytesRead == -1) {
-                socketFailure();
-            }
-            return bytesRead;
-        }
-
-        ssize_t Socket::readWait(SocketBuffer &buffer, uint32_t milliseconds)
-        {
-            ssize_t bytesRead = 0;
-            time_t seconds = milliseconds / 1000;
-            suseconds_t microseconds = (milliseconds - (seconds * 1000)) * 1000;
-
-            struct timeval tv = {seconds, microseconds};
-            fd_set readDescriptorSet;
-            fd_set exceptionDescriptorSet;
-            
-            FD_ZERO(&readDescriptorSet);
-            FD_ZERO(&exceptionDescriptorSet);
-
-            FD_SET(m_socketHandle, &readDescriptorSet);
-            FD_SET(m_socketHandle, &exceptionDescriptorSet);
-
-            if (select(m_socketHandle + 1, &readDescriptorSet, nullptr, &exceptionDescriptorSet, &tv) != -1) {
-                if (FD_ISSET(m_socketHandle, &readDescriptorSet)) {
-                    bytesRead = read(buffer);
-                } else if (FD_ISSET(m_socketHandle, &exceptionDescriptorSet)) {
-                    socketFailure();
-                }
-            } else {
-                socketFailure();
-            }
-            return bytesRead;
         }
 
         void Socket::socketFailure()

@@ -31,14 +31,22 @@ namespace afm {
 
             virtual bool initialize(const SocketOptions &options) = 0;
             virtual void shutdown() = 0;
+
             virtual void addListener(iSocketListenerSPtr pSocketListener) = 0;
             virtual void removeListener(iSocketListenerSPtr pSocketListener) = 0;
 
+            virtual const std::string &getSocketClientId() const = 0;
+
             virtual bool write(const SocketBuffer &data) = 0;
-            virtual SocketBuffer read() = 0;
-            virtual SocketBuffer readWait(uint32_t milliseconds) = 0;
-            virtual SocketBuffer transfer(const SocketBuffer &data) = 0;
-            virtual SocketBuffer transferWait(const SocketBuffer &data, uint32_t milliseconds) = 0;
+            virtual bool write(const std::string &socketClientId, const SocketBuffer &data) = 0;
+
+            virtual bool read(SocketBuffer &data) = 0;
+            virtual bool readWait(SocketBuffer &data, uint32_t milliseconds) = 0;
+
+            virtual bool transfer(const SocketBuffer &dataOut, SocketBuffer &dataIn) = 0;
+            virtual bool transfer(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn) = 0;
+            virtual bool transferWait(const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) = 0;
+            virtual bool transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) = 0;
         };
 
         using iSocketListeners = std::list<iSocketListenerSPtr>;

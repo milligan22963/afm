@@ -9,6 +9,8 @@
 
 #include <atomic>
 #include <list>
+#include <map>
+#include <string>
 #include <thread>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -19,7 +21,7 @@
 namespace afm {
   namespace communications {
 
-    using ClientSockets = std::list<ClientSocketSPtr>;
+    using ClientSockets = std::map<std::string, ClientSocketSPtr>;
 
     class ServerSocket : public Socket
     {
@@ -28,6 +30,10 @@ namespace afm {
 
         virtual bool initialize(const SocketOptions &options) override;
         virtual void shutdown() override;
+
+        virtual bool write(const std::string &socketClientId, const SocketBuffer &data) override;
+        virtual bool transfer(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn) override;
+        virtual bool transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) override;
 
     protected:
         void processing();

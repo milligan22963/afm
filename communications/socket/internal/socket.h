@@ -28,12 +28,16 @@ namespace afm {
         virtual void addListener(iSocketListenerSPtr pSocketListener) final;
         virtual void removeListener(iSocketListenerSPtr pSocketListener) final;
 
+        virtual const std::string &getSocketClientId() const final { return m_socketClientId; }
 
         virtual bool write(const SocketBuffer &data) override;
-        virtual SocketBuffer read() override;
-        virtual SocketBuffer readWait(uint32_t milliseconds) override;
-        virtual SocketBuffer transfer(const SocketBuffer &data) override;
-        virtual SocketBuffer transferWait(const SocketBuffer &data, uint32_t milliseconds) override;
+        virtual bool write(const std::string &socketClientId, const SocketBuffer &data) override;
+        virtual bool read(SocketBuffer &data) override;
+        virtual bool readWait(SocketBuffer &data, uint32_t milliseconds) override;
+        virtual bool transfer(const SocketBuffer &dataOut, SocketBuffer &dataIn) override;
+        virtual bool transfer(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn) override;
+        virtual bool transferWait(const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) override;
+        virtual bool transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) override;
 
     protected:
         bool connect();
@@ -63,8 +67,6 @@ namespace afm {
         virtual void socketFailure();
 
     private:
-        ssize_t read(SocketBuffer &buffer);
-        ssize_t readWait(SocketBuffer &buffer, uint32_t milliseconds);
 
         static const uint8_t sm_connectionDelay = 15;
 

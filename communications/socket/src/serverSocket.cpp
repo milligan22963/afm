@@ -55,6 +55,39 @@ namespace afm {
             Socket::shutdown();
         }
 
+        bool ServerSocket::write(const std::string &socketClientId, const SocketBuffer &data)
+        {
+            bool success = false;
+
+            ClientSockets::iterator iter = m_clients.find(socketClientId);
+            if (iter != m_clients.end()) {
+                success = iter->second->write(data);
+            }
+            return success;
+        }
+
+        bool ServerSocket::transfer(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn)
+        {
+            bool success = false;
+            
+            ClientSockets::iterator iter = m_clients.find(socketClientId);
+            if (iter != m_clients.end()) {
+                success = iter->second->transfer(dataOut, dataIn);
+            }
+            return success;
+        }
+
+        bool ServerSocket::transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds)
+        {
+            bool success = false;
+            
+            ClientSockets::iterator iter = m_clients.find(socketClientId);
+            if (iter != m_clients.end()) {
+                success = iter->second->transferWait(dataOut, dataIn, milliseconds);
+            }
+            return success;
+        }
+
         void ServerSocket::processing()
         {
             struct sockaddr_in  clientAddress;
@@ -70,7 +103,7 @@ namespace afm {
                         pSocket->addListener(listener);
                     }
                     pSocket->setClientSocket(client);
-                    m_clients.push_back(pSocket);
+                    m_clients[pSocket->getSocketClientId()] = pSocket;
                 }
                 sleep(1); // pause a bit
             }
