@@ -193,7 +193,7 @@ namespace afm {
             m_lock.wake();
         }
 
-        void MQTTClient::onMessageReceived(iMQTTPacketSPtr pPacket)
+        void MQTTClient::onMessageReceived(const std::string &clientSocketId, iMQTTPacketSPtr pPacket)
         {
             // check state to see if we are waiting on something...such as a connection request etc
             switch (pPacket->getType()) {
@@ -284,19 +284,19 @@ namespace afm {
             m_lock.wake();
         }
 
-        void MQTTClient::onMessageDelivered(iMQTTPacketSPtr pPacket)
+        void MQTTClient::onMessageDelivered(const std::string &clientSocketId, iMQTTPacketSPtr pPacket)
         {
 
         }
 
-        void MQTTClient::onDisconnected()
+        void MQTTClient::onDisconnected(const std::string &clientSocketId)
         {
             m_isConnected = false;
 
             m_lock.wake();
         }
 
-        void MQTTClient::onError()
+        void MQTTClient::onError(const std::string &clientSocketId)
         {
             m_isConnected = false;
 

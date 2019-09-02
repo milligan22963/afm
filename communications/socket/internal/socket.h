@@ -74,6 +74,7 @@ namespace afm {
       std::atomic<bool>   m_reconnect;
       int32_t             m_socketHandle = sc_closedSocket;
       struct sockaddr_in  m_socketAddress;
+      std::string         m_socketClientId = "";
       std::string         m_url = "localhost";
       uint16_t            m_port = 9001;
       int                 m_lastError = 0;

@@ -53,7 +53,7 @@ namespace afm {
             }
 
             for (auto listener : m_socketListeners) {
-                listener->onDisconnected();
+                listener->onDisconnected(m_socketClientId);
             }
             m_socketListeners.clear();
 
@@ -88,7 +88,7 @@ namespace afm {
             bool success = true;
             if (::write(m_socketHandle, data.data(), data.size()) > 0) {
                 for (auto listener : m_socketListeners) {
-                    listener->onDataWritten(data);
+                    listener->onDataWritten(m_socketClientId, data);
                 }
             } else {
                 socketFailure();
@@ -157,9 +157,10 @@ namespace afm {
 
                         snprintf(&buffer[bufferLength], 127 - bufferLength, ":%u", m_socketAddress.sin_port);
                     }
+                    m_socketClientId = buffer;
                     success = true;
                     for (auto listener : m_socketListeners) {
-                        listener->onConnected(buffer);
+                        listener->onConnected(m_socketClientId);
                     }
                 }
             }
@@ -244,7 +245,7 @@ namespace afm {
             m_lastError = errno;
 
             for (auto listener : m_socketListeners) {
-                listener->onError(m_lastError);
+                listener->onError(m_socketClientId, m_lastError);
             }
 
             // close it - assumed it was open but just in case
@@ -270,8 +271,9 @@ namespace afm {
 
                 snprintf(&buffer[bufferLength], 127 - bufferLength, ":%u", m_socketAddress.sin_port);
             }
+            m_socketClientId = buffer;
             for (auto listener : m_socketListeners) {
-                listener->onConnected(buffer);
+                listener->onConnected(m_socketClientId);
             }
         }
 
@@ -283,7 +285,7 @@ namespace afm {
                 if (m_socketConnected == true) {
                     if (readWait(incomingData, 1000) > 0) {
                         for (auto listener : m_socketListeners) {
-                            listener->onDataReceived(incomingData);
+                            listener->onDataReceived(m_socketClientId, incomingData);
                         }
                     }
                 } else if (m_reconnect == true) {

@@ -36,10 +36,10 @@ namespace afm {
                  * ISocketListener interface implementation
                  */
                 virtual void onConnected(const std::string &clientSocketId) override;
-                virtual void onDataReceived(const SocketBuffer &socketBuffer) override;
-                virtual void onDataWritten(const SocketBuffer &socketBuffer) override;
-                virtual void onError(int socketError) override;
-                virtual void onDisconnected() override;
+                virtual void onDataReceived(const std::string &clientSocketId, const SocketBuffer &socketBuffer) override;
+                virtual void onDataWritten(const std::string &clientSocketId, const SocketBuffer &socketBuffer) override;
+                virtual void onError(const std::string &clientSocketId, int socketError) override;
+                virtual void onDisconnected(const std::string &clientSocketId) override;
 
                 virtual bool shutdown();
     

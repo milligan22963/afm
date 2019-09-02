@@ -1,5 +1,5 @@
 /**
- * @brief IMQTTProcessorListener
+ * @brief iMQTTProcessorListener
  * 
  * Internal interface for MQTT Client/Server implementations
  * 
@@ -20,10 +20,10 @@ namespace afm {
                 virtual ~iMQTTProcessListener() {}
 
                 virtual void onConnected(const std::string &clientSocketId) = 0;
-                virtual void onMessageReceived(const iMQTTPacketSPtr pPacket) = 0;
-                virtual void onMessageDelivered(const iMQTTPacketSPtr pPacket) = 0;
-                virtual void onDisconnected() = 0;
-                virtual void onError() = 0;
+                virtual void onMessageReceived(const std::string &clientSocketId, const iMQTTPacketSPtr pPacket) = 0;
+                virtual void onMessageDelivered(const std::string &clientSocketId, const iMQTTPacketSPtr pPacket) = 0;
+                virtual void onDisconnected(const std::string &clientSocketId) = 0;
+                virtual void onError(const std::string &clientSocketId) = 0;
         };
 
         using iMQTTProcessListenerSPtr = std::shared_ptr<iMQTTProcessListener>;

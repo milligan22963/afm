@@ -96,44 +96,44 @@ namespace afm {
             }
         }
 
-        void MQTTProcessor::onDataReceived(const SocketBuffer &socketBuffer)
+        void MQTTProcessor::onDataReceived(const std::string &clientSocketId, const SocketBuffer &socketBuffer)
         {
             // convert this buffer to a message and pass it to the listener(s)
             iMQTTPacketSPtr pPacket = MQTTFactory::getInstance()->createPacket(socketBuffer);
 
             if (pPacket != nullptr) {
                 for (auto listener : m_listeners) {
-                    listener->onMessageReceived(pPacket);
+                    listener->onMessageReceived(clientSocketId, pPacket);
                 }
             } else {
                 // failed
             }
         }
 
-        void MQTTProcessor::onDataWritten(const SocketBuffer &socketBuffer)
+        void MQTTProcessor::onDataWritten(const std::string &clientSocketId, const SocketBuffer &socketBuffer)
         {
             iMQTTPacketSPtr pPacket = MQTTFactory::getInstance()->createPacket(socketBuffer);
 
             if (pPacket != nullptr) {
                 for (auto listener : m_listeners) {
-                    listener->onMessageDelivered(pPacket);
+                    listener->onMessageDelivered(clientSocketId, pPacket);
                 }
             } else {
                 // failed
             }
         }
 
-        void MQTTProcessor::onError(int socketError)
+        void MQTTProcessor::onError(const std::string &clientSocketId, int socketError)
         {
             for (auto listener : m_listeners) {
-                listener->onError();
+                listener->onError(clientSocketId);
             }
         }
 
-        void MQTTProcessor::onDisconnected()
+        void MQTTProcessor::onDisconnected(const std::string &clientSocketId)
         {
             for (auto listener : m_listeners) {
-                listener->onDisconnected();
+                listener->onDisconnected(clientSocketId);
             }
         }
     }

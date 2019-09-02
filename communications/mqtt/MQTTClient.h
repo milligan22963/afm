@@ -53,10 +53,10 @@ namespace afm {
                  * iMQTTProcessorListener interface implementation
                  */
                 virtual void onConnected(const std::string &clientSocketId) override;
-                virtual void onMessageReceived(const iMQTTPacketSPtr pPacket) override;
-                virtual void onMessageDelivered(const iMQTTPacketSPtr pPacket) override;
-                virtual void onDisconnected() override;
-                virtual void onError() override;
+                virtual void onMessageReceived(const std::string &clientSocketId, const iMQTTPacketSPtr pPacket) override;
+                virtual void onMessageDelivered(const std::string &clientSocketId, const iMQTTPacketSPtr pPacket) override;
+                virtual void onDisconnected(const std::string &clientSocketId) override;
+                virtual void onError(const std::string &clientSocketId) override;
 
             protected:
                 void processMyMessages(iMQTTPacketSPtr pMessage);
