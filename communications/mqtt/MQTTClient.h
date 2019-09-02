@@ -52,7 +52,7 @@ namespace afm {
                 /**
                  * iMQTTProcessorListener interface implementation
                  */
-                virtual void onConnected() override;
+                virtual void onConnected(const std::string &clientSocketId) override;
                 virtual void onMessageReceived(const iMQTTPacketSPtr pPacket) override;
                 virtual void onMessageDelivered(const iMQTTPacketSPtr pPacket) override;
                 virtual void onDisconnected() override;

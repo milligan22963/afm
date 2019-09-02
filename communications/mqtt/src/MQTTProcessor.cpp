@@ -88,11 +88,11 @@ namespace afm {
             m_listeners.remove(pListener);
         }
 
-        void MQTTProcessor::onConnected(const std::string &clientId)
+        void MQTTProcessor::onConnected(const std::string &clientSocketId)
         {
             // Inform of socket level connection
             for (auto listener : m_listeners) {
-                listener->onConnected();
+                listener->onConnected(clientSocketId);
             }
         }
 

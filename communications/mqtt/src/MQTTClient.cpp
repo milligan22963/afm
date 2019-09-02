@@ -187,7 +187,7 @@ namespace afm {
             m_subscriptionsToRemove.clear();
         }
 
-        void MQTTClient::onConnected()
+        void MQTTClient::onConnected(const std::string &clientSocketId)
         {
             sendConnect();
             m_lock.wake();

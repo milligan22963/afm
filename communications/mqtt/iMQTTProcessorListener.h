@@ -19,7 +19,7 @@ namespace afm {
             public:
                 virtual ~iMQTTProcessListener() {}
 
-                virtual void onConnected() = 0;
+                virtual void onConnected(const std::string &clientSocketId) = 0;
                 virtual void onMessageReceived(const iMQTTPacketSPtr pPacket) = 0;
                 virtual void onMessageDelivered(const iMQTTPacketSPtr pPacket) = 0;
                 virtual void onDisconnected() = 0;
