@@ -31,6 +31,7 @@ namespace afm {
 
     protected:
         void processing();
+        virtual void socketFailure() override;
 
     private:
         std::atomic<bool>   m_threadRunning;

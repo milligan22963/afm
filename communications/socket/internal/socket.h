@@ -60,10 +60,11 @@ namespace afm {
          */
         void read_processing();
 
+        virtual void socketFailure();
+
     private:
         ssize_t read(SocketBuffer &buffer);
         ssize_t readWait(SocketBuffer &buffer, uint32_t milliseconds);
-        void socketFailure();
 
         static const uint8_t sm_connectionDelay = 15;
 

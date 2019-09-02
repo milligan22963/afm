@@ -36,7 +36,6 @@ namespace afm {
             if (extractValue(options, sc_socketURL, m_url) == true) {
                 if (extractValue(options, sc_socketPort, m_port) == true) {
                     m_socketHandle = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-                    std::cout << "Socket has been created.\n";
                     if (m_socketHandle != sc_closedSocket) {
                         success = true;
                     }
@@ -247,6 +246,13 @@ namespace afm {
             for (auto listener : m_socketListeners) {
                 listener->onError(m_lastError);
             }
+
+            // close it - assumed it was open but just in case
+            if (m_socketHandle != sc_closedSocket) {
+                ::close(m_socketHandle);
+            }
+            // grab a new one since the other had issue(s)
+            m_socketHandle = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
         }
 
         void Socket::setSocketHandle(int32_t socketHandle)

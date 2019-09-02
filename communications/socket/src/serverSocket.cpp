@@ -75,5 +75,27 @@ namespace afm {
                 sleep(1); // pause a bit
             }
         }
+
+        void ServerSocket::socketFailure()
+        {
+            Socket::socketFailure();
+
+            if (m_threadRunning == true) {
+                m_threadRunning = false;
+                m_processingThread.join();
+            }
+
+            int socketOption = 1;
+
+            if (setsockopt(getSocketHandle(), SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &socketOption, sizeof(socketOption)) == 0) {
+                if (bind(getSocketHandle(), (struct sockaddr *)&m_serverAddress, sizeof(m_serverAddress)) == 0) {
+
+                    if (listen(getSocketHandle(), 20) == 0) {
+                        m_threadRunning = true;
+                        m_processingThread = std::thread(&ServerSocket::processing, this);
+                    }
+                }
+            }
+        }
     }
 }
