@@ -1,0 +1,1 @@
+A set of configurations for various architectures.  The intent is to support RaspberryPI, DragonBoard 410, etc.  Right now I am just focusing on my local build machine.  See build.sh in the root directory for details of specifying which architecture to use.
