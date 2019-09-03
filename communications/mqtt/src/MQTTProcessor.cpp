@@ -36,7 +36,7 @@ namespace afm {
             bool success = false;
 
             std::string processorType;
-            if (extractValue(options, sc_processorType, processorType) == true) {
+            if (common::extractValue(options, sc_processorType, processorType) == true) {
                 if (processorType == sc_mqttClient) {
                     m_connection = SocketFactory::getInstance()->createSocket(eSocketType::eClientSocket);
                 } else {

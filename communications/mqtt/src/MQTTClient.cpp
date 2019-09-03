@@ -35,14 +35,14 @@ namespace afm {
 
             m_pProcessor = std::make_shared<MQTTProcessor>();
 
-            extractValue(options, sc_keepAlive, m_keepAliveTime);
-            extractValue(options, sc_clientId, m_clientId);
+            common::extractValue(options, sc_keepAlive, m_keepAliveTime);
+            common::extractValue(options, sc_clientId, m_clientId);
 
             // pull out persistence object and then path and backlog...
             MQTTOptions persistence;
-            if (extractValue(options, sc_persistence, persistence) == true) {
-                extractValue(options, sc_persistencePath, m_persistencePath);
-                extractValue(options, sc_persistenceBacklog, m_maxBacklog);
+            if (common::extractValue(options, sc_persistence, persistence) == true) {
+                common::extractValue(options, sc_persistencePath, m_persistencePath);
+                common::extractValue(options, sc_persistenceBacklog, m_maxBacklog);
             }
 
             MQTTOptions clientOptions = options;

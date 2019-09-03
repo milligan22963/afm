@@ -33,8 +33,8 @@ namespace afm {
         {
             bool success = false;
             
-            if (extractValue(options, sc_socketURL, m_url) == true) {
-                if (extractValue(options, sc_socketPort, m_port) == true) {
+            if (common::extractValue(options, sc_socketURL, m_url) == true) {
+                if (common::extractValue(options, sc_socketPort, m_port) == true) {
                     m_socketHandle = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
                     if (m_socketHandle != sc_closedSocket) {
                         success = true;

@@ -11,7 +11,7 @@
 #include <json.hpp>
 
 namespace afm {
-    namespace communications {
+    namespace common {
         template <typename T>
         bool extractValue(const nlohmann::json &values, const std::string &name, T &value)
         {

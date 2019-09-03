@@ -25,7 +25,7 @@ namespace afm {
         {
             bool success = false;
 
-            success = extractValue(options, sc_optionMessageId, m_messageId);
+            success = common::extractValue(options, sc_optionMessageId, m_messageId);
 
             return success;
         }

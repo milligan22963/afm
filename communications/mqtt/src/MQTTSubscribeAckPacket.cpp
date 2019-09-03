@@ -31,7 +31,7 @@ namespace afm {
                 MQTT_QOS qos = MQTT_QOS::MQTT_QOS_0;
 
                 for (auto subscription : options[sc_subscriptions]) {
-                    results.insert(extractValue(subscription, sc_qosLevel, qos));
+                    results.insert(common::extractValue(subscription, sc_qosLevel, qos));
                     m_subscriptionStatus.push_back(qos);
                 }
             } else {

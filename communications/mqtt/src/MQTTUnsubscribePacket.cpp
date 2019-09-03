@@ -32,7 +32,7 @@ namespace afm {
                 MQTTBuffer topic;
 
                 for (auto subscription : options[sc_subscriptions]) {
-                    results.insert(extractValue(subscription, sc_topic, topic));
+                    results.insert(common::extractValue(subscription, sc_topic, topic));
 
                     m_subscriptions.push_back(topic);
                 }

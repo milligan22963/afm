@@ -1,5 +1,5 @@
 /**
- * @brief ProcessLock
+ * @brief processLock
  * 
  * Class for aquiring a lock and wait for event
  * 

@@ -29,8 +29,8 @@ namespace afm {
             std::set<bool> results;
             
             if (MQTTPacket::initialize(options) == true) {
-                results.insert(extractValue(options, sc_sessionPresent, m_sessionPresent));
-                results.insert(extractValue(options, sc_connectionResponse, m_connectionResponse));
+                results.insert(common::extractValue(options, sc_sessionPresent, m_sessionPresent));
+                results.insert(common::extractValue(options, sc_connectionResponse, m_connectionResponse));
             }
 
             return results.find(false) == results.end() ? true : false;
