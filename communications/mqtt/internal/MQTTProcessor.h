@@ -18,9 +18,6 @@
 
 namespace afm {
     namespace communications {
-        extern const std::string sc_processorType;
-        extern const std::string sc_mqttClient;
-        extern const std::string sc_mqttServer;
 
         class MQTTProcessor : public iSocketListener, public std::enable_shared_from_this<MQTTProcessor>
         {

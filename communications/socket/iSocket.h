@@ -11,7 +11,6 @@
 
 #include <atomic>
 #include <cstdint>
-#include <list>
 #include <memory>
 #include <string>
 #include <vector>
@@ -49,7 +48,6 @@ namespace afm {
             virtual bool transferWait(const std::string &socketClientId, const SocketBuffer &dataOut, SocketBuffer &dataIn, uint32_t milliseconds) = 0;
         };
 
-        using iSocketListeners = std::list<iSocketListenerSPtr>;
         using iSocketSPtr = std::shared_ptr<iSocket>;
     }
 }

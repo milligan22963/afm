@@ -7,8 +7,8 @@
 #ifndef _H_ISOCKET_LISTENER
 #define _H_ISOCKET_LISTENER
 
+#include <list>
 #include <memory>
-#include <string>
 
 #include "socketDefines.h"
 
@@ -22,14 +22,15 @@ namespace afm {
             {
             }
 
-            virtual void onConnected(const std::string &clientSocketId) = 0;
-            virtual void onDataReceived(const std::string &clientSocketId, const SocketBuffer &socketBuffer) = 0;
-            virtual void onDataWritten(const std::string &clientSocketId, const SocketBuffer &socketBuffer) = 0;
-            virtual void onError(const std::string &clientSocketId, int socketError) = 0;
-            virtual void onDisconnected(const std::string &clientSocketId) = 0;
+            virtual void onConnected() = 0;
+            virtual void onDataReceived(const SocketBuffer &socketBuffer) = 0;
+            virtual void onDataWritten(const SocketBuffer &socketBuffer) = 0;
+            virtual void onError(int socketError) = 0;
+            virtual void onDisconnected() = 0;
         };
 
-        using iSocketListenerSPtr = std::shared_ptr<iSocketListener>; 
+        using iSocketListenerSPtr = std::shared_ptr<iSocketListener>;
+        using iSocketListeners = std::list<iSocketListenerSPtr>;
     }
 }
 #endif

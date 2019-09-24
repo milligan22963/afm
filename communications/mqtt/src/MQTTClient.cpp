@@ -12,23 +12,43 @@
 #include "MQTTFactory.h"
 #include "MQTTConnectAckPacket.h"
 #include "MQTTSubscribeAckPacket.h"
+#include "socketFactory.h"
 
 namespace afm {
     namespace communications {
         MQTTClient::MQTTClient()
-            : m_keepProcessing(false)
-            , m_currentState(MQTTState::eEndMQTTStates)
-            , m_isConnected(false)
-            , m_subscribeOnConnect(false)
+            : MQTTInstance()
         {
 
         }
 
         MQTTClient::~MQTTClient()
         {
-            shutdown();
         }
 
+        bool MQTTClient::initialize(const MQTTOptions &options)
+        {
+            bool success = MQTTInstance::initialize(options);
+
+            if (success == true) {
+                success = common::extractValue(options, sc_clientId, m_clientId);
+            }
+
+            return success;
+        }
+
+        bool MQTTClient::start(iSocketSPtr pSocket)
+        {
+            if (pSocket == nullptr) {
+                pSocket = SocketFactory::getInstance()->createSocket(eSocketType::eClientSocket);
+            }
+
+            pSocket->addListener(shared_from_base<MQTTClient>());
+
+            return MQTTInstance::start(pSocket);
+        }
+
+#if 0
         bool MQTTClient::initialize(const MQTTOptions &options, iMQTTListenerSPtr pListener)
         {
             bool success = false;
@@ -483,5 +503,6 @@ namespace afm {
                 }
             }
         }
+#endif
     }
 }

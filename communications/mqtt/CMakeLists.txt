@@ -6,16 +6,17 @@ set(MQTT_LIB_FILES
     src/MQTTConnectAckPacket.cpp
     src/MQTTDisconnectPacket.cpp
     src/MQTTFactory.cpp
+    src/MQTTInstance.cpp
     src/MQTTPacket.cpp
     src/MQTTPacketOptions.cpp
     src/MQTTPingRequestPacket.cpp
     src/MQTTPingResponsePacket.cpp
-    src/MQTTProcessor.cpp
     src/MQTTPublishPacket.cpp
     src/MQTTPublishAckPacket.cpp
     src/MQTTPublishCompletedPacket.cpp
     src/MQTTPublishReceivedPacket.cpp
     src/MQTTPublishReleasedPacket.cpp
+    src/MQTTServer.cpp
     src/MQTTSubscribePacket.cpp
     src/MQTTSubscribeAckPacket.cpp
     src/MQTTTrackedPacket.cpp
@@ -30,6 +31,7 @@ set(MQTT_SRC_FILES
 include_directories (
     .
     internal
+    ${CMAKE_SOURCE_DIR}
     ${JSON_INCLUDE}
     ${SOCKET_INCLUDE}
     ${COMMON_INCLUDE}

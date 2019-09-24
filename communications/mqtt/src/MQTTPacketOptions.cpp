@@ -23,6 +23,9 @@ namespace afm {
         const std::string sc_persistence = "persistence";
         const std::string sc_persistencePath = "path";
         const std::string sc_persistenceBacklog = "backlog";
+        const std::string sc_instanceType = "instance_type";
+        const std::string sc_mqttClient = "client";
+        const std::string sc_mqttServer = "server";
 
         /**
          * MQTT Connect options

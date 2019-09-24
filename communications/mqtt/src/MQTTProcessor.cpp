@@ -17,10 +17,6 @@
 namespace afm {
     namespace communications {
 
-        const std::string sc_processorType = "type";
-        const std::string sc_mqttClient = "client";
-        const std::string sc_mqttServer = "server";
-
         MQTTProcessor::MQTTProcessor()
         {
 
@@ -35,9 +31,9 @@ namespace afm {
         {
             bool success = false;
 
-            std::string processorType;
-            if (common::extractValue(options, sc_processorType, processorType) == true) {
-                if (processorType == sc_mqttClient) {
+            std::string instanceType;
+            if (common::extractValue(options, sc_instanceType, instanceType) == true) {
+                if (instanceType == sc_mqttClient) {
                     m_connection = SocketFactory::getInstance()->createSocket(eSocketType::eClientSocket);
                 } else {
                     m_connection = SocketFactory::getInstance()->createSocket(eSocketType::eServerSocket);

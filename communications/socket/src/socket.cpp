@@ -53,7 +53,7 @@ namespace afm {
             }
 
             for (auto listener : m_socketListeners) {
-                listener->onDisconnected(m_socketClientId);
+                listener->onDisconnected();
             }
             m_socketListeners.clear();
 
@@ -88,7 +88,7 @@ namespace afm {
             bool success = true;
             if (::write(m_socketHandle, data.data(), data.size()) > 0) {
                 for (auto listener : m_socketListeners) {
-                    listener->onDataWritten(m_socketClientId, data);
+                    listener->onDataWritten(data);
                 }
             } else {
                 socketFailure();
@@ -212,7 +212,7 @@ namespace afm {
                     m_socketClientId = buffer;
                     success = true;
                     for (auto listener : m_socketListeners) {
-                        listener->onConnected(m_socketClientId);
+                        listener->onConnected();
                     }
                 }
             }
@@ -252,7 +252,7 @@ namespace afm {
             m_lastError = errno;
 
             for (auto listener : m_socketListeners) {
-                listener->onError(m_socketClientId, m_lastError);
+                listener->onError(m_lastError);
             }
 
             // close it - assumed it was open but just in case
@@ -280,7 +280,7 @@ namespace afm {
             }
             m_socketClientId = buffer;
             for (auto listener : m_socketListeners) {
-                listener->onConnected(m_socketClientId);
+                listener->onConnected();
             }
         }
 
@@ -292,7 +292,7 @@ namespace afm {
                 if (m_socketConnected == true) {
                     if (readWait(incomingData, 1000) > 0) {
                         for (auto listener : m_socketListeners) {
-                            listener->onDataReceived(m_socketClientId, incomingData);
+                            listener->onDataReceived(incomingData);
                         }
                     }
                 } else if (m_reconnect == true) {

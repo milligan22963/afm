@@ -6,7 +6,8 @@
     "title": "The primary mqtt server/client options",
     "required": [
         "url",
-        "port"
+        "port",
+        "instance_type"
     ],
     "properties": {
         "url": {
@@ -29,6 +30,25 @@
                 8883
             ]
         },
+        "client_id": {
+            "$id": "#/properties/client_id",
+            "type": "string",
+            "title": "Client id",
+            "definition": "The client id used between this client and the broker",
+            "pattern": "[0-9a-zA-Z]",
+            "minimum": 1,
+            "maximum": 23,
+            "$comment": "The maximum the broker must allow is 23 though you could have more"
+        },
+        "instance_type": {
+            "$id": "#/properties/instance_type",
+            "type": "string",
+            "title": "Instance type",
+            "definition": "The type of instance i.e. client or server",
+            "enum": ["client", "server"],
+            "default" : "client",
+            "$comment": "Defines if this should be a client connection or server i.e. broker"
+        },
         "persistence": {
             "$id" : "#/properties/persistence",
             "type":"object",
@@ -48,6 +68,14 @@
                 }
             }
         }
-    }
+    },
+    "anyOf": [{
+        "properties": {
+            "instance_type": {
+                "const": "client"
+            }
+        },
+        "required": ["client_id"]
+    }]
 }
    
